@@ -1,0 +1,36 @@
+### Register
+POST localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "mod",
+  "email": "mod@gokalp.com",
+  "password": "testPassword",
+  "role": ["mod", "user"]
+}
+
+### test-all
+GET localhost:8080/api/test/all
+
+### test-user
+GET localhost:8080/api/test/user
+
+### test-mod
+GET localhost:8080/api/test/mod
+
+### test-admin
+GET localhost:8080/api/test/admin
+
+### sign-in
+POST localhost:8080/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "mod",
+  "password": "testPassword"
+}
+
+### sign-out
+POST localhost:8080/api/auth/signout
+Content-Type: application/json
+
