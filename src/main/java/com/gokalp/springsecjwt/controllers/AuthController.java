@@ -1,22 +1,12 @@
 package com.gokalp.springsecjwt.controllers;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
-import com.gokalp.springsecjwt.models.ERole;
-import com.gokalp.springsecjwt.models.Role;
-import com.gokalp.springsecjwt.models.User;
-import com.gokalp.springsecjwt.payload.request.LoginRequest;
-import com.gokalp.springsecjwt.payload.request.SignupRequest;
-import com.gokalp.springsecjwt.payload.response.MessageResponse;
-import com.gokalp.springsecjwt.payload.response.UserInfoResponse;
-import com.gokalp.springsecjwt.repository.RoleRepository;
-import com.gokalp.springsecjwt.repository.UserRepository;
-import com.gokalp.springsecjwt.security.jwt.JwtUtils;
-import com.gokalp.springsecjwt.security.services.UserDetailsImpl;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -31,6 +21,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+
+import com.gokalp.springsecjwt.models.ERole;
+import com.gokalp.springsecjwt.models.Role;
+import com.gokalp.springsecjwt.models.User;
+import com.gokalp.springsecjwt.payload.request.LoginRequest;
+import com.gokalp.springsecjwt.payload.request.SignupRequest;
+import com.gokalp.springsecjwt.payload.response.MessageResponse;
+import com.gokalp.springsecjwt.payload.response.UserInfoResponse;
+import com.gokalp.springsecjwt.repository.RoleRepository;
+import com.gokalp.springsecjwt.repository.UserRepository;
+import com.gokalp.springsecjwt.security.jwt.JwtUtils;
+import com.gokalp.springsecjwt.security.services.UserDetailsImpl;
+
 /**
  * @author Gokalp on 16.01.2023
  * @project SpringSecJwt
@@ -67,7 +71,6 @@ public class AuthController {
 
         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
-
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
@@ -76,9 +79,7 @@ public class AuthController {
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         userDetails.getEmail(),
-                        roles, jwtCookie.toString())
-
-                        );
+                        roles));
     }
 
     @PostMapping("/signup")
@@ -100,26 +101,26 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(String.valueOf(ERole.ROLE_USER))
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "admin":
-                        Role adminRole = roleRepository.findByName(String.valueOf(ERole.ROLE_ADMIN))
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(adminRole);
 
                         break;
                     case "mod":
-                        Role modRole = roleRepository.findByName(String.valueOf(ERole.ROLE_MODERATOR))
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(modRole);
 
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(String.valueOf(ERole.ROLE_USER))
+                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(userRole);
                 }

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,19 +25,19 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @project SpringSecJwt
  */
 
+
 @Configuration
 //@EnableWebSecurity
 @EnableGlobalMethodSecurity(
         // securedEnabled = true,
         // jsr250Enabled = true,
         prePostEnabled = true)
-@RequiredArgsConstructor
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
 
-    private final UserDetailsServiceImpl userDetailsService;
-
-
-    private final AuthEntryPointJwt unauthorizedHandler;
+    @Autowired
+    private AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -81,11 +82,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 //      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 //      .authorizeRequests().antMatchers("/api/auth/**").permitAll()
 //      .antMatchers("/api/test/**").permitAll()
-//      .antMatchers(h2ConsolePath + "/**").permitAll()
 //      .anyRequest().authenticated();
-//
-//    // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
-//    http.headers().frameOptions().sameOrigin();
 //
 //    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 //  }
@@ -98,9 +95,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers("/api/test/**").permitAll()
                 .anyRequest().authenticated();
-
-        // fix H2 database console: Refused to display ' in a frame because it set 'X-Frame-Options' to 'deny'
-        http.headers().frameOptions().sameOrigin();
 
         http.authenticationProvider(authenticationProvider());
 
