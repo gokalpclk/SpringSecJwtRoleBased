@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Gokalp on 16.01.2023
  * @project SpringSecJwt
  */
-@CrossOrigin
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/test")
 public class TestController {
     @GetMapping("/all")

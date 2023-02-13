@@ -40,8 +40,8 @@ import com.gokalp.springsecjwt.security.services.UserDetailsImpl;
  * @project SpringSecJwt
  */
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
